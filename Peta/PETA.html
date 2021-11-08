@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+//14117015
+	<title>PETA</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+		crossorigin="" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+		crossorigin=""></script>
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+
+
+</head>
+
+<body>
+
+
+
+	<div id="mapid" style="width: 600px; height: 400px;"></div>
+	<script>
+
+		var mymap = L.map('mapid').setView([-4.832747528467393, 104.8968674453255], 13);
+		/*
+		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+		//L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+			maxZoom: 18,
+			id: 'mapbox.streets-satellite',
+			accessToken: 'pk.eyJ1IjoibWFydGluYXp6aSIsImEiOiJjamlkZXc0M2swYXdhM2txbGhtY3k4ZXpyIn0.-4TmLYyDfWkMCkrNm6JcaA'
+		}).addTo(mymap);*/
+		googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+			maxZoom: 20,
+			subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+		}).addTo(mymap)
+
+
+		var marker = L.marker([-4.832747528467393, 104.8968674453255], { draggable: true });
+		marker.on('dragend', function (event) {
+			var marker = event.target;
+			var position = marker.getLatLng();
+			console.log(position.lat);
+			console.log(position.lng);
+		});
+		marker.addTo(mymap);
+		var popup = L.popup();
+
+		function onMapClick(e) {
+			popup
+				.setLatLng(e.latlng)
+				.setContent("You clicked the map at " + e.latlng.toString())
+				.openOn(mymap);
+		}
+
+		mymap.on('click', onMapClick);
+
+		L.Control.geocoder().addTo(mymap);
+
+	</script>
+</body>
+
+</html>
